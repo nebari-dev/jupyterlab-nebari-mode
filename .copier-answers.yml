@@ -1,0 +1,19 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.2.5
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: internal-it@quansight.com
+author_name: Nebari development team
+data_format: string
+file_extension: ''
+has_binder: true
+has_settings: false
+kind: frontend
+labextension_name: jupyterlab-nebari-mode
+mimetype: ''
+mimetype_name: ''
+project_short_description: Nebari customizations for JupyterLab.
+python_name: jupyterlab_nebari_mode
+repository: https://github.com/nebari-dev/jupyterlab-nebari-mode
+test: true
+viewer_name: ''
+
