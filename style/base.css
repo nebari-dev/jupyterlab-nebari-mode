@@ -3,3 +3,17 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.nebariLogo-link {
+  height: 100%;
+}
+
+.nebariLogo-link:hover {
+  background: var(--jp-layout-color2);
+}
+
+.nebariLogo-link:focus-visible {
+  outline: 2px solid var(--jp-brand-color1);
+  outline-offset: -3px;
+  outline-style: auto;
+}

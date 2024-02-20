@@ -94,6 +94,9 @@
         "access": "public"
     },
     "jupyterlab": {
+        "disabledExtensions": [
+            "@jupyterlab/application-extension:logo"
+        ],
         "extension": true,
         "outputDir": "jupyterlab_nebari_mode/labextension"
     },

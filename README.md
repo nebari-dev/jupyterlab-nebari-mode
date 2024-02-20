@@ -5,6 +5,11 @@
 
 Nebari customizations for JupyterLab.
 
+## Plugins
+
+- `jupyterlab-nebari-mode:logo`: replaces `@jupyterlab/application-extension:logo`, adding clickable Nebari logo:
+  ![](https://raw.githubusercontent.com/nebari-dev/jupyterlab-nebari-mode/main/ui-tests/tests/jupyterlab_nebari_mode.spec.ts-snapshots/top-panel-linux.png)
+
 ## Requirements
 
 - JupyterLab >= 4.0.0

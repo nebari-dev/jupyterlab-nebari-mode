@@ -1,21 +1,28 @@
 import { expect, test } from '@jupyterlab/galata';
 
-/**
- * Don't load JupyterLab webpage before running the tests.
- * This is required to ensure we capture all log messages.
- */
-test.use({ autoGoto: false });
+test('should swap Jupyter logo with clickable Nebari logo', async ({
+  page
+}) => {
+  // Jupyter icon should not be in the main logo
+  const jupyterLogo = page.locator(
+    '#jp-MainLogo > [data-icon="ui-components:jupyter"]'
+  );
+  await expect(jupyterLogo).toHaveCount(0);
 
-test('should emit an activation console message', async ({ page }) => {
-  const logs: string[] = [];
+  // Nebari logo should be in the main logo
+  const link = page.locator('#jp-MainLogo > .nebariLogo-link');
+  await expect(link).toHaveCount(1);
 
-  page.on('console', message => {
-    logs.push(message.text());
-  });
+  // It should look nice and clean in the top panel
+  const topPanel = page.locator('#jp-top-panel');
+  expect.soft(await topPanel.screenshot()).toMatchSnapshot('top-panel.png');
 
-  await page.goto();
+  // Link should change background on hover
+  await link.hover();
+  expect.soft(await link.screenshot()).toMatchSnapshot('nebari-logo-hover.png');
+  await link.blur();
 
-  expect(
-    logs.filter(s => s === 'JupyterLab extension jupyterlab-nebari-mode is activated!')
-  ).toHaveLength(1);
+  // Link should have a focus indicator
+  await link.focus();
+  expect(await link.screenshot()).toMatchSnapshot('nebari-logo-focus.png');
 });
