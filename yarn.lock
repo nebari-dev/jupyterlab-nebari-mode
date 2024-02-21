@@ -2092,7 +2092,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/application@npm:^4.0.0, @jupyterlab/application@npm:^4.1.2":
+"@jupyterhub/jupyter-server-proxy@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@jupyterhub/jupyter-server-proxy@npm:4.1.0"
+  dependencies:
+    "@jupyterlab/application": ^3.0 || ^4.0
+    "@jupyterlab/filebrowser": ^3.0 || ^4.0
+    "@jupyterlab/launcher": ^3.0 || ^4.0
+  checksum: d8006409ff0ca6029f00c7255447e052957bb4fa03ca02a1441ef277b128dde4f3d095c1f3ef920bb8e27c91386812bf81c3894b9cdac61b7dd9b70a616586df
+  languageName: node
+  linkType: hard
+
+"@jupyterlab/application@npm:^3.0 || ^4.0, @jupyterlab/application@npm:^4.0.0, @jupyterlab/application@npm:^4.1.2":
   version: 4.1.2
   resolution: "@jupyterlab/application@npm:4.1.2"
   dependencies:
@@ -2388,7 +2399,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/filebrowser@npm:^4.1.2":
+"@jupyterlab/filebrowser@npm:^3.0 || ^4.0, @jupyterlab/filebrowser@npm:^4.1.2":
   version: 4.1.2
   resolution: "@jupyterlab/filebrowser@npm:4.1.2"
   dependencies:
@@ -2413,6 +2424,24 @@ __metadata:
     "@lumino/widgets": ^2.3.1
     react: ^18.2.0
   checksum: 0dd60c41b69458de8a7efb09ab7b6d9a06587761b00656a5f301980c30b9e180c986bd1074bc491a5fb4658ed2802ab4ea2eb1e9c3b2c565a1aef135c4b02fe0
+  languageName: node
+  linkType: hard
+
+"@jupyterlab/launcher@npm:^3.0 || ^4.0":
+  version: 4.1.2
+  resolution: "@jupyterlab/launcher@npm:4.1.2"
+  dependencies:
+    "@jupyterlab/apputils": ^4.2.2
+    "@jupyterlab/translation": ^4.1.2
+    "@jupyterlab/ui-components": ^4.1.2
+    "@lumino/algorithm": ^2.0.1
+    "@lumino/commands": ^2.2.0
+    "@lumino/coreutils": ^2.1.2
+    "@lumino/disposable": ^2.1.2
+    "@lumino/properties": ^2.0.1
+    "@lumino/widgets": ^2.3.1
+    react: ^18.2.0
+  checksum: bc6f4fb53bf273e28b94b41ec9c87e7f2747053f3266519e1c2472dcc42636d10a80ecc99aaaa20d15ecd77230307dbba7696536177b01fb4631588ffa8bba53
   languageName: node
   linkType: hard
 
@@ -7199,6 +7228,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "jupyterlab-nebari-mode@workspace:."
   dependencies:
+    "@jupyterhub/jupyter-server-proxy": ^4.1.0
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0
     "@jupyterlab/testutils": ^4.0.0

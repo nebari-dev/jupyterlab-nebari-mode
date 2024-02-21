@@ -8,6 +8,7 @@
 
         python3 binder/postBuild
 """
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -42,6 +43,10 @@ _("jupyter", "server", "extension", "list")
 # initially list installed extensions to determine if there are any surprises
 _("jupyter", "labextension", "list")
 
+# copy overrides.json to right location
+NB_PYTHON_PREFIX = os.environ["NB_PYTHON_PREFIX"]
+_("mkdir", "-p", f"{NB_PYTHON_PREFIX}/share/jupyter/lab/settings/")
+_("cp", "binder/overrides.json", f"{NB_PYTHON_PREFIX}/share/jupyter/lab/settings/")
 
 print("JupyterLab with jupyterlab_nebari_mode is ready to run with:\n")
 print("\tjupyter lab\n")
