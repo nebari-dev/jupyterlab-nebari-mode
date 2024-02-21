@@ -1,0 +1,21 @@
+{
+  "@jupyterlab/mainmenu-extension:plugin": {
+    "menus": [
+      {
+        "id": "jp-mainmenu-services",
+        "disabled": false,
+        "label": "Services",
+        "rank": 1000,
+        "items": [
+          {
+            "command": "nebari:open-proxy",
+            "rank": 1,
+            "args": {
+              "name": "vscode"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
