@@ -9,6 +9,16 @@ Nebari customizations for JupyterLab.
 
 - `jupyterlab-nebari-mode:logo`: replaces `@jupyterlab/application-extension:logo`, adding clickable Nebari logo:
   ![](https://raw.githubusercontent.com/nebari-dev/jupyterlab-nebari-mode/main/ui-tests/tests/jupyterlab_nebari_mode.spec.ts-snapshots/top-panel-linux.png)
+- `jupyterlab-nebari-mode:commands` adds `nebari:open-proxy` command for opening proxied processes, such as VSCode. This command can be used to add a menu entry, e.g.:
+  ```json
+  {
+    "command": "nebari:open-proxy",
+    "rank": 1,
+    "args": {
+      "name": "vscode"
+    }
+  }
+  ```
 
 ## Requirements
 

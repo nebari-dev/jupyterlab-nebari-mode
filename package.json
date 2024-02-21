@@ -1,6 +1,6 @@
 {
     "name": "jupyterlab-nebari-mode",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Nebari customizations for JupyterLab.",
     "keywords": [
         "jupyter",
@@ -59,6 +59,7 @@
         "@jupyterlab/application": "^4.0.0"
     },
     "devDependencies": {
+        "@jupyterhub/jupyter-server-proxy": "^4.1.0",
         "@jupyterlab/builder": "^4.0.0",
         "@jupyterlab/testutils": "^4.0.0",
         "@types/jest": "^29.2.0",

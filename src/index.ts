@@ -1,9 +1,11 @@
+import type { IServersInfo } from '@jupyterhub/jupyter-server-proxy/lib/tokens';
 import {
   ILabShell,
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { URLExt } from '@jupyterlab/coreutils';
+import { ServerConnection } from '@jupyterlab/services';
+import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { Widget } from '@lumino/widgets';
 import { nebariIcon } from './icons';
 
@@ -47,9 +49,81 @@ class NebariLogo extends Widget {
   }
 }
 
-/**
- * Initialization data for the jupyterlab-nebari-mode extension.
- */
+namespace CommandIDs {
+  /**
+   * Opens a process proxied by jupyter-server-proxy (such as VSCode).
+   */
+  export const openProxy = 'nebari:open-proxy';
+}
+
+interface IOpenProxyArgs {
+  /**
+   * Name of the server process to open.
+   */
+  name?: string;
+}
+
+const commandsPlugin: JupyterFrontEndPlugin<void> = {
+  id: 'jupyterlab-nebari-mode:commands',
+  description: 'Adds additional commands used by nebari.',
+  autoStart: true,
+  requires: [],
+  activate: async (app: JupyterFrontEnd) => {
+    const serverSettings = ServerConnection.makeSettings();
+    const baseUrl = PageConfig.getBaseUrl();
+    const url = URLExt.join(baseUrl, 'server-proxy/servers-info');
+    const response = await ServerConnection.makeRequest(
+      url,
+      {},
+      serverSettings
+    );
+    if (!response.ok) {
+      throw Error('Server proxy info not available');
+    }
+    const data = (await response.json()) as IServersInfo;
+
+    const findProcess = (name?: string) => {
+      if (!name) {
+        return null;
+      }
+      const matches = data.server_processes.filter(
+        process => process.name === name
+      );
+      if (matches.length === 0) {
+        return null;
+      }
+      return matches[0];
+    };
+
+    app.commands.addCommand(CommandIDs.openProxy, {
+      execute: (args: IOpenProxyArgs) => {
+        const processs = findProcess(args.name);
+        if (!processs) {
+          throw Error(`Process for ${args.name} not found`);
+        }
+
+        const url = `${baseUrl}${processs.launcher_entry.path_info}`;
+
+        if (processs.new_browser_tab) {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+          window.location.href = url;
+        }
+      },
+      isVisible: (args: IOpenProxyArgs) => {
+        const processs = findProcess(args.name);
+        return !!processs;
+      },
+      label: (args: IOpenProxyArgs) => {
+        const processs = findProcess(args.name);
+        return processs
+          ? `Open ${processs.launcher_entry.title}`
+          : 'Open Proxied Process';
+      }
+    });
+  }
+};
+
 const logoPlugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-nebari-mode:logo',
   description: 'Sets the application logo.',
@@ -65,4 +139,6 @@ const logoPlugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
-export default logoPlugin;
+const plugins = [commandsPlugin, logoPlugin];
+
+export default plugins;
