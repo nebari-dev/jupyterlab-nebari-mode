@@ -78,7 +78,7 @@ const commandsPlugin: JupyterFrontEndPlugin<void> = {
       serverSettings
     );
     if (!response.ok) {
-      console.error('Server proxy info not available');
+      console.warn('Server proxy info not available');
       return;
     }
     const data = (await response.json()) as IServersInfo;
