@@ -42,6 +42,8 @@ _("jupyter", "server", "extension", "list")
 # initially list installed extensions to determine if there are any surprises
 _("jupyter", "labextension", "list")
 
+_("mkdir", "-p", "$NB_PYTHON_PREFIX/share/jupyter/lab/settings/")
+_("cp", "binder/overrides.json", "$NB_PYTHON_PREFIX/share/jupyter/lab/settings/")
 
 print("JupyterLab with jupyterlab_nebari_mode is ready to run with:\n")
 print("\tjupyter lab\n")

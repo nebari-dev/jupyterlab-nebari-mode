@@ -26,3 +26,23 @@ test('should swap Jupyter logo with clickable Nebari logo', async ({
   await link.focus();
   expect(await link.screenshot()).toMatchSnapshot('nebari-logo-focus.png');
 });
+
+test('should register custom commands', async ({ page }) => {
+  const openVScodeProxy = await page.evaluate(async () => {
+    const registry = window.jupyterapp.commands;
+    const id = 'nebari:open-proxy';
+    const args = { name: 'vscode' };
+
+    return {
+      id,
+      label: registry.label(id, args),
+      isEnabled: registry.isEnabled(id, args)
+    };
+  });
+
+  // Should set correct label for given command
+  expect(openVScodeProxy.label).toBe('Open VS Code');
+
+  // Should be enabled when `jupyter-vscode-proxy` is installed
+  expect(openVScodeProxy.isEnabled).toBe(true);
+});

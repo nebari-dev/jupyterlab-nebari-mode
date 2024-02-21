@@ -110,7 +110,7 @@ const commandsPlugin: JupyterFrontEndPlugin<void> = {
           window.location.href = url;
         }
       },
-      isVisible: (args: IOpenProxyArgs) => {
+      isEnabled: (args: IOpenProxyArgs) => {
         const processs = findProcess(args.name);
         return !!processs;
       },
