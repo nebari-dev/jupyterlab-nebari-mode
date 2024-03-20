@@ -27,22 +27,81 @@ test('should swap Jupyter logo with clickable Nebari logo', async ({
   expect(await link.screenshot()).toMatchSnapshot('nebari-logo-focus.png');
 });
 
-test('should register custom commands', async ({ page }) => {
-  const openVScodeProxy = await page.evaluate(async () => {
-    const registry = window.jupyterapp.commands;
-    const id = 'nebari:open-proxy';
-    const args = { name: 'vscode' };
+test.describe('should register custom commands', () => {
+  test('nebari:open-proxy command works', async ({ page }) => {
+    const openVScodeProxy = await page.evaluate(async () => {
+      const registry = window.jupyterapp.commands;
+      const id = 'nebari:open-proxy';
+      const args = { name: 'vscode' };
 
-    return {
-      id,
-      label: registry.label(id, args),
-      isEnabled: registry.isEnabled(id, args)
-    };
+      return {
+        id,
+        label: registry.label(id, args),
+        isEnabled: registry.isEnabled(id, args)
+      };
+    });
+
+    // Should set correct label for given command
+    expect(openVScodeProxy.label).toBe('Open VS Code');
+
+    // Should be enabled when `jupyter-vscode-proxy` is installed
+    expect(openVScodeProxy.isEnabled).toBe(true);
   });
 
-  // Should set correct label for given command
-  expect(openVScodeProxy.label).toBe('Open VS Code');
+  test('nebari:run-first-enabled command returns default label of first enabled command', async ({
+    page
+  }) => {
+    const runFirstEnabled = await page.evaluate(async () => {
+      const registry = window.jupyterapp.commands;
+      const id = 'nebari:run-first-enabled';
+      const args = {
+        commands: [
+          {
+            id: 'this-command-does-not-exist'
+          },
+          {
+            id: 'nebari:open-proxy',
+            args: { name: 'vscode' }
+          }
+        ]
+      };
 
-  // Should be enabled when `jupyter-vscode-proxy` is installed
-  expect(openVScodeProxy.isEnabled).toBe(true);
+      return {
+        id,
+        label: registry.label(id, args),
+        isEnabled: registry.isEnabled(id, args)
+      };
+    });
+    // Should set correct label for given command
+    expect(runFirstEnabled.label).toBe('Open VS Code');
+  });
+
+  test('nebari:run-first-enabled command returns custom label if given', async ({
+    page
+  }) => {
+    const runFirstEnabled = await page.evaluate(async () => {
+      const registry = window.jupyterapp.commands;
+      const id = 'nebari:run-first-enabled';
+      const args = {
+        commands: [
+          {
+            id: 'this-command-does-not-exist'
+          },
+          {
+            id: 'nebari:open-proxy',
+            args: { name: 'vscode' },
+            label: 'Open Service VSCode'
+          }
+        ]
+      };
+
+      return {
+        id,
+        label: registry.label(id, args),
+        isEnabled: registry.isEnabled(id, args)
+      };
+    });
+    // Should set correct label for given command
+    expect(runFirstEnabled.label).toBe('Open Service VSCode');
+  });
 });

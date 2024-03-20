@@ -9,16 +9,38 @@ Nebari customizations for JupyterLab.
 
 - `jupyterlab-nebari-mode:logo`: replaces `@jupyterlab/application-extension:logo`, adding clickable Nebari logo:
   ![](https://raw.githubusercontent.com/nebari-dev/jupyterlab-nebari-mode/main/ui-tests/tests/jupyterlab_nebari_mode.spec.ts-snapshots/top-panel-linux.png)
-- `jupyterlab-nebari-mode:commands` adds `nebari:open-proxy` command for opening proxied processes, such as VSCode. This command can be used to add a menu entry, e.g.:
-  ```json
-  {
-    "command": "nebari:open-proxy",
-    "rank": 1,
-    "args": {
-      "name": "vscode"
+- `jupyterlab-nebari-mode:commands` adds the following commands:
+  - `nebari:open-proxy` which opens proxied processes, such as VSCode; this command can be used to add a menu entry, e.g.:
+    ```json
+    {
+      "command": "nebari:open-proxy",
+      "rank": 1,
+      "args": {
+        "name": "vscode"
+      }
     }
-  }
-  ```
+    ```
+  - `nebari:run-first-enabled` which runs the first available and enabled command; it differs from the built-in `apputils:run-first-enabled` command in that it takes a list of objects representing the commands, allowing to customise the `label`, `iconClass`, `caption`, `usage`, and `className` properties. An example usage for menu customization would be adding a menu entry labelled `Import numpy in File Editor` when user has the File Editor open and `Import numpy in Notebook` when user has a Notebook open:
+    ```json
+    {
+      "command": "nebari:run-first-enabled",
+      "rank": 1,
+      "args": {
+        "commands": [
+          {
+            "id": "fileeditor:replace-selection",
+            "label": "Import numpy in File Editor",
+            "args": { "text": "import numpy as np" }
+          },
+          {
+            "id": "notebook:replace-selection",
+            "label": "Import numpy in Notebook",
+            "args": { "text": "import numpy as np" }
+          }
+        ]
+      }
+    }
+    ```
 
 ## Requirements
 
