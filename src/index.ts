@@ -7,6 +7,7 @@ import {
 import { ServerConnection } from '@jupyterlab/services';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { Widget } from '@lumino/widgets';
+import { CommandRegistry } from '@lumino/commands';
 import { nebariIcon } from './icons';
 
 class NebariLogo extends Widget {
@@ -54,6 +55,11 @@ namespace CommandIDs {
    * Opens a process proxied by jupyter-server-proxy (such as VSCode).
    */
   export const openProxy = 'nebari:open-proxy';
+  /**
+   * Run first enabled command, similar to `apputils:run-first-enabled`,
+   * but assumes all properties of the first enabled command.
+   */
+  export const runFirstEnabled = 'nebari:run-first-enabled';
 }
 
 interface IOpenProxyArgs {
@@ -61,6 +67,25 @@ interface IOpenProxyArgs {
    * Name of the server process to open.
    */
   name?: string;
+}
+
+interface ICommandDescription
+  extends Omit<CommandRegistry.ICommandOptions, 'execute'> {
+  /**
+   * The identifier of the command.
+   */
+  id: string;
+  /**
+   * The arguments for the command.
+   */
+  args: any;
+}
+
+interface IRunFirstEnabledArgs {
+  /**
+   * Name of the server process to open.
+   */
+  commands?: ICommandDescription[];
 }
 
 const commandsPlugin: JupyterFrontEndPlugin<void> = {
@@ -120,6 +145,53 @@ const commandsPlugin: JupyterFrontEndPlugin<void> = {
         return processs
           ? `Open ${processs.launcher_entry.title}`
           : 'Open Proxied Process';
+      }
+    });
+
+    const returnFirstEnabled = (
+      args: IRunFirstEnabledArgs,
+      method: 'label' | 'iconClass' | 'caption' | 'usage' | 'className'
+    ): string | undefined => {
+      const commands = args.commands ?? [];
+      for (const command of commands) {
+        if (
+          app.commands.hasCommand(command.id) &&
+          app.commands.isEnabled(command.id, command.args)
+        ) {
+          return (
+            (command[method] as string | undefined) ??
+            app.commands[method](command.id, command.args)
+          );
+        }
+      }
+    };
+
+    app.commands.addCommand(CommandIDs.runFirstEnabled, {
+      execute: (args: IRunFirstEnabledArgs) => {
+        const commands = args.commands ?? [];
+        for (const command of commands) {
+          if (
+            app.commands.hasCommand(command.id) &&
+            app.commands.isEnabled(command.id, command.args)
+          ) {
+            return app.commands.execute(command.id, command.args);
+          }
+        }
+      },
+      label: (args: IRunFirstEnabledArgs) => {
+        return returnFirstEnabled(args, 'label') ?? 'Run First Enabled';
+      },
+      iconClass: (args: IRunFirstEnabledArgs) => {
+        return returnFirstEnabled(args, 'iconClass') ?? '';
+      },
+      caption: (args: IRunFirstEnabledArgs) => {
+        return returnFirstEnabled(args, 'caption') ?? '';
+      },
+      usage: (args: IRunFirstEnabledArgs) => {
+        return returnFirstEnabled(args, 'usage') ?? '';
+      },
+      className: (args: IRunFirstEnabledArgs) => {
+        return returnFirstEnabled(args, 'className') ?? '';
       }
     });
   }
