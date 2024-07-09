@@ -1,4 +1,4 @@
-# jupyterlab_nebari_mode
+# jupyterlab-nebari-mode
 
 [![Github Actions Status](https://github.com/nebari-dev/jupyterlab-nebari-mode/workflows/Build/badge.svg)](https://github.com/nebari-dev/jupyterlab-nebari-mode/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nebari-dev/jupyterlab-nebari-mode/main?urlpath=lab)
